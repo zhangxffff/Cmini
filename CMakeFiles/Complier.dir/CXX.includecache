@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/hulianthus/Programs/Projects/CLionProjects/Complier/global.h
+iostream
+-
+fstream
+-
+cctype
+-
+string
+-
+list
+-
+vector
+-
+algorithm
+-
+
+/home/hulianthus/Programs/Projects/CLionProjects/Complier/main.cpp
+iomanip
+-
+global.h
+/home/hulianthus/Programs/Projects/CLionProjects/Complier/global.h
+
