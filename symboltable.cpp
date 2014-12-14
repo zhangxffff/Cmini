@@ -1,7 +1,9 @@
-#include "symbol.h"
+#include "symboltable.h"
 
 
-Symbol::Symbol() {
+SymbolTable::SymbolTable() {
+    addToken("int", TokenType::KEYWORD, TokenValue::INT);
+    addToken("double", TokenType::KEYWORD, TokenValue::DOUBLE);
     //分支与循环
     addToken("if", TokenType::OPREATOR, TokenValue::IF);
     addToken("else", TokenType::OPREATOR, TokenValue::ELSE);
@@ -29,11 +31,11 @@ Symbol::Symbol() {
 
     //比较
     addToken("==", TokenType::OPREATOR, TokenValue::EQUAL);
-    addToken("!=", TokenType::OPREATOR , TokenValue::NOT_EAUAL);
-    addToken(">", TokenType::OPREATOR , TokenValue::GREATER);
-    addToken("<", TokenType::OPREATOR , TokenValue::LESS);
-    addToken(">=", TokenType::OPREATOR , TokenValue::NOT_LESS);
-    addToken("<=", TokenType::OPREATOR , TokenValue::NOT_GREATER);
+    addToken("!=", TokenType::OPREATOR, TokenValue::NOT_EAUAL);
+    addToken(">", TokenType::OPREATOR, TokenValue::GREATER);
+    addToken("<", TokenType::OPREATOR, TokenValue::LESS);
+    addToken(">=", TokenType::OPREATOR, TokenValue::NOT_LESS);
+    addToken("<=", TokenType::OPREATOR, TokenValue::NOT_GREATER);
 
     //括号与逗号
     addToken("(", TokenType::DELIMITER, TokenValue::LPAR);
@@ -43,21 +45,21 @@ Symbol::Symbol() {
     addToken(",", TokenType::DELIMITER, TokenValue::COMMA);
     addToken(";", TokenType::DELIMITER, TokenValue::SEMI);
 
-    addToken("END_OF_FILE", TokenType::END_OF_FILE , TokenValue::UNDEFINE);
+    addToken("END_OF_FILE", TokenType::END_OF_FILE, TokenValue::UNDEFINE);
 }
 
-void Symbol::addToken(const std::string &name, TokenType tokenType, TokenValue tokenValue) {
-    symbol.insert({name, std::make_tuple(tokenType, tokenValue)});
+void SymbolTable::addToken(const std::string &name, TokenType tokenType, TokenValue tokenValue) {
+    symbolTable.insert({name, std::make_tuple(tokenType, tokenValue)});
 }
 
-std::tuple<TokenType, TokenValue> Symbol::findToken(const std::string &name) {
-    auto res = symbol.find(name);
-    if(res != symbol.end()){
+std::tuple<TokenType, TokenValue> SymbolTable::findToken(const std::string &name) {
+    auto res = symbolTable.find(name);
+    if (res != symbolTable.end()) {
         return res->second;
     }
     return std::make_tuple(TokenType::UNKOWN, TokenValue::UNDEFINE);
 }
 
-bool Symbol::haveToken(const std::string &name) {
-    return symbol.find(name) != symbol.end();
+bool SymbolTable::haveToken(const std::string &name) {
+    return symbolTable.find(name) != symbolTable.end();
 }

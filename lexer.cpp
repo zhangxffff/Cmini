@@ -29,54 +29,54 @@ void Lexer::makeToken(std::string name, TokenType type, TokenValue value, std::s
 void Lexer::handleNum() {
     int intValue = 0;
     char c;
-    while (input.get(c) && std::isdigit(c)){
+    while (input.get(c) && std::isdigit(c)) {
         intValue *= 10;
         intValue += c - '0';
         buffer.push_back(c);
     }
-    if(input.eof()){
-        makeToken(buffer, TokenType::INTEGER , TokenValue::UNDEFINE , intValue);
+    if (input.eof()) {
+        makeToken(buffer, TokenType::INTEGER, TokenValue::INTNUM, intValue);
         return;
     }
-    if(c != '.'){
+    if (c != '.') {
         input.unget();
-        makeToken(buffer, TokenType::INTEGER , TokenValue::UNDEFINE , intValue);
+        makeToken(buffer, TokenType::INTEGER, TokenValue::INTNUM, intValue);
         return;
     }
     else {
         double realValue = 0;
         buffer.push_back(c);
 
-        while(input.get(c) && std::isdigit(c)){
+        while (input.get(c) && std::isdigit(c)) {
             realValue += c - '0';
             realValue /= 10;
             buffer.push_back(c);
         }
         realValue += intValue;
-        if (!input.eof()){
+        if (!input.eof()) {
             input.unget();
         }
-        makeToken(buffer, TokenType::REAL , TokenValue::UNDEFINE , realValue);
+        makeToken(buffer, TokenType::REAL, TokenValue::DOUBLENUM, realValue);
         return;
     }
 }
 
 void Lexer::handleIdentifier() {
     char c;
-    while (input.get(c) && isalnum(c)){
+    while (input.get(c) && isalnum(c)) {
         buffer.push_back(c);
     }
-    if(!input.eof()){
+    if (!input.eof()) {
         input.unget();
     }
-    if(symbol.haveToken(buffer)){
-        auto tokenTuple = symbol.findToken(buffer);
+    if (symbolTable.haveToken(buffer)) {
+        auto tokenTuple = symbolTable.findToken(buffer);
         makeToken(buffer, std::get<0>(tokenTuple), std::get<1>(tokenTuple));
         return;
     }
     else {
-        symbol.addToken(buffer, TokenType::IDENTIFIER , TokenValue::VARIABLE);
-        makeToken(buffer, TokenType::IDENTIFIER , TokenValue::VARIABLE);
+        symbolTable.addToken(buffer, TokenType::IDENTIFIER, TokenValue::ID);
+        makeToken(buffer, TokenType::IDENTIFIER, TokenValue::ID);
         return;
     }
 }
@@ -86,14 +86,14 @@ void Lexer::handleOther() {
     input.get(c);
     buffer.push_back(c);
 
-    if(c == '\n'){
+    if (c == '\n') {
         line++;
         buffer.clear();
         setNextToken();
         return;
     }
-    if(c == '/'){
-        if(input.get(c) && (c == '/' | '*')){
+    if (c == '/') {
+        if (input.get(c) && (c == '/' | c == '*')) {
             input.unget();
             handleComment();
             setNextToken();
@@ -102,10 +102,10 @@ void Lexer::handleOther() {
     }
 
 
-    if(input.get(c)){
+    if (input.get(c)) {
         buffer.push_back(c);
-        if(symbol.haveToken(buffer)){
-            auto tokenTuple = symbol.findToken(buffer);
+        if (symbolTable.haveToken(buffer)) {
+            auto tokenTuple = symbolTable.findToken(buffer);
             makeToken(buffer, std::get<0>(tokenTuple), std::get<1>(tokenTuple));
             return;
         }
@@ -113,8 +113,8 @@ void Lexer::handleOther() {
         input.unget();
     }
 
-    if(symbol.haveToken(buffer)){
-        auto tokenTuple = symbol.findToken(buffer);
+    if (symbolTable.haveToken(buffer)) {
+        auto tokenTuple = symbolTable.findToken(buffer);
         makeToken(buffer, std::get<0>(tokenTuple), std::get<1>(tokenTuple));
         return;
     }
@@ -126,18 +126,18 @@ void Lexer::handleOther() {
 
 void Lexer::handleComment() {
     char c, nextc;
-    if(input.get(c) && input.get(nextc)){
-        if(c == '/' && nextc == '/'){
-            while(input.get(c) && c != '\n');
-            if(!input.eof())input.unget();
+    if (input.get(c) && input.get(nextc)) {
+        if (c == '/' && nextc == '/') {
+            while (input.get(c) && c != '\n');
+            if (!input.eof())input.unget();
             return;
-        }else if (c == '/' && nextc == '*'){
+        } else if (c == '/' && nextc == '*') {
             input.get(c);
-            while(input.get(nextc)){
-                if(c == '*' && nextc == '/'){
+            while (input.get(nextc)) {
+                if (c == '*' && nextc == '/') {
                     return;
                 }
-                if(nextc == '\n'){
+                if (nextc == '\n') {
                     line++;
                 }
                 c = nextc;
@@ -148,20 +148,20 @@ void Lexer::handleComment() {
 }
 
 void Lexer::setNextToken() {
-    if(input.eof()){
-        makeToken("END_OF_FILE", TokenType::END_OF_FILE , TokenValue::UNDEFINE);
+    if (input.eof()) {
+        makeToken("END_OF_FILE", TokenType::END_OF_FILE, TokenValue::UNDEFINE);
     }
     char c;
     input.get(c);
-    while (c == 32){
+    while (c == 32) {
         input.get(c);
     }
     input.unget();
 
-    if (std::isdigit(c)){
+    if (std::isdigit(c)) {
         handleNum();
     }
-    else if (std::isalpha(c)){
+    else if (std::isalpha(c)) {
         handleIdentifier();
     }
     else {
@@ -171,7 +171,7 @@ void Lexer::setNextToken() {
 }
 
 Token Lexer::getNextToken() {
-    setNextToken();
     Token res = token;
+    setNextToken();
     return res;
 }

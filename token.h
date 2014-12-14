@@ -2,8 +2,9 @@
 #define TOKEN_H
 
 #include<string>
+#include <stdbool.h>
 
-enum class TokenType{
+enum class TokenType {
     INTEGER,
     REAL,
     CHAR,
@@ -16,14 +17,18 @@ enum class TokenType{
     UNKOWN
 };
 
-enum class TokenValue{
+enum class TokenValue {
+    INT,
+    DOUBLE,
     //分支与循环
+
     IF,
     ELSE,
     FOR,
     WHILE,
 
     //算术运算
+
     ADD,
     SUB,
     MUL,
@@ -31,12 +36,14 @@ enum class TokenValue{
     ASSIGN,
 
     //逻辑运算
+
     AND,
     OR,
     NOT,
 
 
     //位运算
+
     LSHIFT,
     RSHIFT,
     BITNOT,
@@ -44,6 +51,7 @@ enum class TokenValue{
     BITOR,
 
     //比较
+
     EQUAL,
     NOT_EAUAL,
     GREATER,
@@ -52,6 +60,7 @@ enum class TokenValue{
     NOT_LESS,
 
     //括号与逗号
+
     LPAR,
     RPAR,
     LBRACE,
@@ -59,11 +68,16 @@ enum class TokenValue{
     COMMA,
     SEMI,
 
-    VARIABLE,
-    UNDEFINE
+    ID,
+    INTNUM,
+    DOUBLENUM,
+    STRING,
+    UNDEFINE,
+
+    TERMINAL_NUM
 };
 
-class Token{
+class Token {
 private:
     long line;
     std::string name;
@@ -77,10 +91,9 @@ private:
 public:
 
 
-    Token(){
+    Token() {
         line = 0;
     }
-
 
 
     long getLine() const {
@@ -140,7 +153,7 @@ public:
         Token::strValue = strValue;
     }
 
-    void setToken(long line, std::string &name, TokenType const &type, TokenValue const &value, int intValue, double realValue, std::string &strValue){
+    void setToken(long line, std::string &name, TokenType const &type, TokenValue const &value, int intValue, double realValue, std::string &strValue) {
         Token::line = line;
         Token::name = name;
         Token::type = type;
@@ -150,5 +163,7 @@ public:
         Token::strValue = strValue;
     }
 };
+
+
 
 #endif
