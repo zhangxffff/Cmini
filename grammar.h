@@ -43,23 +43,36 @@ static const std::vector<Rule> ruleList = {
                 {NoTerminalType::STMT},
                 {{TerminalType::LBRACE}, {NoTerminalType::MULTISTMT}, {TerminalType::RBRACE}}
         },
-        //MULITISTMT,     MULTISTMT ==> STMT ; MULTISTMT
+        //MULITISTMT,     MULTISTMT ==> STMT MULTISTMT
         {
                 {RuleType::MULITISTMT},
                 {NoTerminalType::MULTISTMT},
-                {{NoTerminalType::STMT}, {TerminalType::SEMI}, {NoTerminalType::MULTISTMT}}
+                {{NoTerminalType::STMT}, {NoTerminalType::MULTISTMT}}
         },
-        //MULTISTMT_END,    MULTISTMT ==> STMT
+        //MULTISTMT_END,    MULTISTMT ==> VOID
         {
                 {RuleType::MULTISTMT_END},
                 {NoTerminalType::MULTISTMT},
-                {{NoTerminalType::STMT}}
+                {}
+        },
+
+        //STMT_OUTPUT,     STMT_OUTPUT ==> OUTPUT ( ID );
+        {
+                {RuleType::STMT_OUTPUT},
+                {NoTerminalType::STMT},
+                {{TerminalType::OUTPUT}, {TerminalType::LPAR}, {TerminalType::ID }, {TerminalType::RPAR}, {TerminalType::SEMI}}
+        },
+        //STMT_INPUT,     STMT ==> INPUT ( ID );
+        {
+                {RuleType::STMT_INPUT},
+                {NoTerminalType::STMT},
+                {{TerminalType::INPUT}, {TerminalType::LPAR}, {TerminalType::ID}, {TerminalType::RPAR}, {TerminalType::SEMI}}
         },
         //STMT_ASSIGN,     STMT ==> ID = EXPR;
         {
                 {RuleType::STMT_ASSIGN},
                 {NoTerminalType::STMT},
-                {{TerminalType::ID}, {TerminalType::EQUAL}, NoTerminalType::EXPR}
+                {{TerminalType::ID}, {TerminalType::ASSIGN}, {NoTerminalType::EXPR}, {TerminalType::SEMI}}
         },
         //STMT_IF,         STMT ==> if ( EXPR ) STMT ELSE STMT
         {
@@ -97,18 +110,25 @@ static const std::vector<Rule> ruleList = {
                 {NoTerminalType::TYPE},
                 {{TerminalType::DOUBLE}}
         },
-        //IDLIST,          IDLIST ==> ID , IDLIST
+        //IDLIST_START,    IDLIST ==> ID COMMA_ID
         {
                 {RuleType::IDLIST},
                 {NoTerminalType::IDLIST},
-                {{TerminalType::ID}, {TerminalType::COMMA}, {NoTerminalType::IDLIST}}
+                {{TerminalType::ID}, {NoTerminalType::COMMA_ID}}
         },
-        //IDLIST_END,      IDLIST ==> ID
+        //IDLIST_END,      COMMA_ID ==> , ID COMMA_ID
         {
                 {RuleType::IDLIST_END},
-                {NoTerminalType::IDLIST},
-                {{TerminalType::ID}}
-        }
+                {NoTerminalType::COMMA_ID},
+                {{TerminalType::COMMA}, {TerminalType::ID}, {NoTerminalType::COMMA_ID }}
+        },
+        //IDLIST_VOID,     COMMA_ID ==> VOID
+        {
+                {RuleType::IDLIST_VOID},
+                {NoTerminalType::COMMA_ID},
+                {}
+        },
+
 };
 
 #endif

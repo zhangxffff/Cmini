@@ -12,6 +12,30 @@ std::ostream &operator<<(std::ostream &out, const NoTerminalType &noTerminalType
             return out << "IDLIST";
         case NoTerminalType::EXPR:
             return out << "EXPR";
+        case NoTerminalType::COMMA_ID:
+            return out << "COMMA_ID";
+        case NoTerminalType::EXPR_ID:
+            return out << "EXPR_ID";
+        case NoTerminalType::EXPR_ADD:
+            return out << "EXPR_ADD";
+        case NoTerminalType::EXPR_SUB:
+            return out << "EXPR_SUB";
+        case NoTerminalType::EXPR_MUL:
+            return out << "EXPR_MUL";
+        case NoTerminalType::EXPR_DIV:
+            return out << "EXPR_DIV";
+        case NoTerminalType::EXPR_NUM:
+            return out << "EXPR_NUM";
+        case NoTerminalType::EXPR_GREATER:
+            return out << "EXPR_GREATER";
+        case NoTerminalType::EXPR_LESS:
+            return out << "EXPR_LESS";
+        case NoTerminalType::EXPR_EQUAL:
+            return out << "EXPR_EQUAL";
+        case NoTerminalType::EXPR_INC:
+            return out << "EXPR_INC";
+        case NoTerminalType::EXPR_DEC:
+            return out << "EXPR_DEC";
         default:
             return out;
     }
@@ -44,6 +68,10 @@ std::ostream &operator<<(std::ostream &out, const TerminalType &terminalTypecons
             return out << "/";
         case TerminalType::ASSIGN:
             return out << "=";
+        case TerminalType::INC:
+            return out << "++";
+        case TerminalType::DEC:
+            return out << "DEC";
 
             //逻辑运算
         case TerminalType::AND:
@@ -172,6 +200,12 @@ std::ostream &operator<<(std::ostream &out, const RuleType &ruleTypeconst) {
         case RuleType::IDLIST_END:
             out << "IDLIST_END";
             break;
+        case RuleType::IDLIST_VOID:
+            out << "IDLIST_VOID";
+        case RuleType::STMT_OUTPUT:
+            out << "STMT_OUTPUT";
+        case RuleType::STMT_INPUT:
+            out << "STMT_INPUT";
         case RuleType::NONE:
             out << "NONE";
     }

@@ -1,3 +1,14 @@
 {
-int a;
+    int a, b, num;
+    input(num);
+    a = 0;
+    b = 1;
+    output(a);
+    output(b);
+    while(num > 2){
+        b = a + b;
+        a = b - a;
+        output(b);
+        num = num - 1;
+    }
 }

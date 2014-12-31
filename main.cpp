@@ -1,19 +1,23 @@
 #include <iostream>
-#include <string>
 #include <iomanip>
 #include "lexer.h"
 #include "test.h"
-#include "grammar.h"
+#include <sstream>
+#include "generate.h"
+
+int main(int argc, char *argv[]) {
 
 
-int main() {
-
-    std::string filename = "/home/hulianthus/Programs/Projects/CLionProjects/Complier/input.txt";
-    Lexer lexer(filename);
+    std::string input = "/home/hulianthus/Programs/Projects/CLionProjects/Complier/input.txt";
+    std::string output = "/home/hulianthus/Programs/Projects/CLionProjects/Complier/output.asm";
+    Lexer lexer(input);
     Parser parser;
+
     parser.analysis(lexer);
 
-    parser.printTree();
+    Generate generate(output);
+
+    generate.genAll(*parser.getTree());
 
     return 0;
 }

@@ -15,7 +15,10 @@ SymbolTable::SymbolTable() {
     addToken("-", TokenType::OPREATOR, TokenValue::SUB);
     addToken("*", TokenType::OPREATOR, TokenValue::MUL);
     addToken("/", TokenType::OPREATOR, TokenValue::DIV);
+    addToken("%", TokenType::OPREATOR , TokenValue::MOD);
     addToken("=", TokenType::OPREATOR, TokenValue::ASSIGN);
+    addToken("++", TokenType::OPREATOR, TokenValue::INC);
+    addToken("--", TokenType::OPREATOR, TokenValue::DEC);
 
     //位运算
     addToken("<<", TokenType::OPREATOR, TokenValue::LSHIFT);
@@ -44,6 +47,9 @@ SymbolTable::SymbolTable() {
     addToken("}", TokenType::DELIMITER, TokenValue::RBRACE);
     addToken(",", TokenType::DELIMITER, TokenValue::COMMA);
     addToken(";", TokenType::DELIMITER, TokenValue::SEMI);
+
+    addToken("output", TokenType::KEYWORD , TokenValue::OUTPUT);
+    addToken("input", TokenType::KEYWORD , TokenValue::INPUT);
 
     addToken("END_OF_FILE", TokenType::END_OF_FILE, TokenValue::UNDEFINE);
 }

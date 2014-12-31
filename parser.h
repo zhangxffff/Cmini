@@ -15,6 +15,12 @@
 
 typedef TokenValue TerminalType;
 
+enum class Comp{
+    HIGHER,
+    LOWER,
+    EQUAL
+};
+
 enum class SymbolType {
     TERMINAL,
     NOTERMINAL
@@ -23,9 +29,31 @@ enum class SymbolType {
 enum class NoTerminalType {
     STMT,
     MULTISTMT,
+
+
     TYPE,
     IDLIST,
+    COMMA_ID,
     EXPR,
+
+    EXPR_ID,
+    EXPR_NUM,
+
+    EXPR_ADD,
+    EXPR_SUB,
+    EXPR_MUL,
+    EXPR_DIV,
+    EXPR_MOD,
+
+    EXPR_GREATER,
+    EXPR_LESS,
+    EXPR_EQUAL,
+
+    EXPR_INC,
+    EXPR_DEC,
+
+
+    EXPR_PAR,
 
     NOTERMINAL_NUM
 };
@@ -41,12 +69,15 @@ enum class RuleType {
     STMT_WHILE,             //    STMT ==> WHILE ( EXPR ) STMT
     STMT_FOR,               //    STMT ==> FOR ( EXPR ; EXPR; EXPR ) STMT
     STMT_DECL,              //    STMT ==> TYPE IDLIST;
+    STMT_OUTPUT,
+    STMT_INPUT,
 
     TYPE_INT,               //    TYPE ==> INT
     TYPE_DOUBLE,            //    TYPE ==> DOUBLE
 
     IDLIST,                 //    IDLIST ==> ID , IDLIST
     IDLIST_END,             //    IDLIST ==> ID
+    IDLIST_VOID
 
 };
 
@@ -120,7 +151,7 @@ public:
         return right;
     }
 
-    Symbol const & getRightFirst() const;
+    Symbol const getRightFirst() const;
 
 };
 
@@ -130,7 +161,6 @@ class Grammar {
 private:
     std::vector<Rule> grammar;
     std::map<NoTerminalType, std::set<TerminalType>> first;
-    std::multimap<NoTerminalType, TerminalType> follow;
 
 public:
     Grammar(std::vector<Rule> const &grammar) : grammar(grammar) {
@@ -138,7 +168,7 @@ public:
 
     std::set<TerminalType> getFirstFromSymbol(Symbol symbol);
 
-
+    std::set<TerminalType> getFollow(Symbol left);
 
     std::map<NoTerminalType, std::set<TerminalType>> const &getFirst() const {
         return first;
@@ -169,6 +199,11 @@ private:
 public:
 
     Tree() {
+    }
+
+    Tree(Token& token){
+        tokenPtr = std::make_shared<Token>(token);
+        symbol = Symbol(token.getValue());
     }
 
     Tree(Symbol const &symbol) : symbol(symbol) {
@@ -210,7 +245,9 @@ public:
 
     void addChild(Symbol symbol);
 
-    void print();
+    void addChild(std::shared_ptr<Tree> treePtr);
+
+    void print(int&);
 };
 
 
@@ -221,11 +258,25 @@ private:
     RuleType analyTable[(int)NoTerminalType::NOTERMINAL_NUM][(int)TerminalType::TERMINAL_NUM];
     std::stack<std::shared_ptr<Tree>> analyStack;
     std::shared_ptr<Tree> tree;
+    std::list<std::shared_ptr<Tree>> exprList;
+    std::map<TerminalType, int> priority;
 
 public:
     Parser();
+
+    std::shared_ptr<Tree> const &getTree() const {
+        return tree;
+    }
+
     void setAnalyTable();
 
+    Comp compare(Symbol, Symbol);
+
+    decltype(exprList.begin()) endExpr(decltype(exprList.begin()));
+
+    decltype(exprList.begin()) beginExpr(decltype(exprList.begin()));
+
+    void handleOperator2(decltype(exprList.begin()) begin, NoTerminalType noTerminalType);
 
     void setAnalyTableEntity(NoTerminalType noTerminalType, TerminalType terminalType, RuleType ruleType) {
         analyTable[(int)noTerminalType][(int)terminalType] = ruleType;

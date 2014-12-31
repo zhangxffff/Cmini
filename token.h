@@ -33,7 +33,10 @@ enum class TokenValue {
     SUB,
     MUL,
     DIV,
+    MOD,
     ASSIGN,
+    DEC,
+    INC,
 
     //逻辑运算
 
@@ -74,7 +77,11 @@ enum class TokenValue {
     STRING,
     UNDEFINE,
 
-    TERMINAL_NUM
+    OUTPUT,
+    INPUT,
+
+    TERMINAL_NUM,
+    NONE
 };
 
 class Token {
