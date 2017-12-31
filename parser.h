@@ -77,8 +77,11 @@ enum class RuleType {
 
     IDLIST,                 //    IDLIST ==> ID , IDLIST
     IDLIST_END,             //    IDLIST ==> ID
-    IDLIST_VOID
+    IDLIST_VOID,            //    IDLIST ==> VOID
 
+    FUNC,                   //    FUNC ==> TYPE ID ( PARA_LIST )
+
+    PARA_LIST,              //    PARA_LIST ==> TYPE ID , PARP_LIST | VOID;
 };
 
 
