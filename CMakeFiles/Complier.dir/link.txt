@@ -1,1 +1,0 @@
-/usr/bin/c++    -std=c++11    CMakeFiles/Complier.dir/main.cpp.o CMakeFiles/Complier.dir/lexer.cpp.o CMakeFiles/Complier.dir/emitter.cpp.o CMakeFiles/Complier.dir/error.cpp.o CMakeFiles/Complier.dir/init.cpp.o CMakeFiles/Complier.dir/parser.cpp.o CMakeFiles/Complier.dir/symbol.cpp.o  -o Complier -rdynamic 

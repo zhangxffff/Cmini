@@ -1,1 +1,0 @@
-/home/hulianthus/Programs/Projects/CLionProjects/Complier/CMakeFiles/Complier.dir
